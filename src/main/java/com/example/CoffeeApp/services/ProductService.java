@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import com.example.CoffeeApp.repositories.ProductRepo;
 import com.example.CoffeeApp.domains.Product;
 
+/* Service class responsible for product-related operations. Implements business logic for product management and interacts with ProductRepo for data access */
+
 @Service
 public class ProductService {
     private final ProductRepo productrepo;
@@ -13,22 +15,23 @@ public class ProductService {
         this.productrepo = productRepo;
     }
 
+    // Adds a new product to the repository
     public void addProduct(Product p) {
         productrepo.save(p);
     }
 
+    // Retrieves a list of all products
     public List<Product> viewProducts() {
-
         return (List<Product>) productrepo.findAll();
-
     }
 
+    // Updates an existing product in the repository
     public String updateProduct(Product p) {
-
         productrepo.save(p);
         return "Product" + p.getproductName() + " " + "with id:" + " " + p.getid() + " " + "is updated sucessfully.";
     }
 
+    // Deletes a product from the repository based on its ID
     public boolean deleteProduct(Long id) {
         if (productrepo.existsById(id)) {
             productrepo.deleteById(id);
@@ -38,10 +41,12 @@ public class ProductService {
         }
     }
 
+    // Checks if a product with the given ID exists in the repository
     public boolean getid(long id) {
         return productrepo.existsById(id);
     }
 
+    // Checks if a product with the given name already exists in the repository
     public boolean getpName(String pName) {
         List<Product> products = viewProducts();
         for (Product product : products) {

@@ -10,17 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.CoffeeApp.domains.Product;
 import com.example.CoffeeApp.services.ProductService;
 
+// Controller for managing product-related operations
+// Handles requests related to products, such as retrieval, creation, update, and deletion
+
 @RestController
 public class ProductController {
     @Autowired
     private ProductService productservice;
 
-    @GetMapping("/getProducts")
+    @GetMapping("/products")
     public List<Product> getProducts() {
         return productservice.viewProducts();
     }
 
-    @PostMapping("/addProducts")
+    @PostMapping("/products/add")
     public String addNewProducts(@RequestBody Product product) {
         if (product.getid() == 0 && productservice.getpName(product.getproductName())) {
             productservice.addProduct(product);
@@ -33,7 +36,7 @@ public class ProductController {
 
     }
 
-    @PutMapping("/updateProducts")
+    @PutMapping("/products/update")
     public ResponseEntity<String> upadateProducts(@RequestBody Product product) {
         boolean isId = productservice.getid(product.getid());
         if (isId) {
@@ -47,7 +50,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/deleteProducts/{id}")
+    @DeleteMapping("/products/delete/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         boolean deleted = productservice.deleteProduct(id);
         if (deleted) {
