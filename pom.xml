@@ -17,6 +17,7 @@
 		<java.version>20</java.version>
 	</properties>
 	<dependencies>
+	
 		<!-- MySQL dependency -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -54,6 +55,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 
 	</dependencies>
 

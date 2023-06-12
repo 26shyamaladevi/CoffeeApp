@@ -1,11 +1,8 @@
 package com.example.CoffeeApp.services;
 
 import com.example.CoffeeApp.repositories.UserRepo;
-
 import com.example.CoffeeApp.domains.User;
-
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 /* Service class responsible for user-related operations.
@@ -14,10 +11,12 @@ Implements business logic for user management and interacts with UserRepo for da
 @Service
 public class UserService {
     public final UserRepo userrepo;
+    public final RoleService roleService;
 
     // Constructor injection of UserRepo dependency
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, RoleService roleservice) {
         this.userrepo = userRepo;
+        this.roleService = roleservice;
     }
 
     // Retrieve all users
@@ -27,7 +26,11 @@ public class UserService {
 
     // Add a new user
     public void addUsers(User user) {
-        userrepo.save(user);
+        if (user.getRole() != null) {
+            roleService.addRoles(user.getRole());
+            userrepo.save(user);
+
+        }
 
     }
 

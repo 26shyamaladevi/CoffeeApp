@@ -1,6 +1,7 @@
 package com.example.CoffeeApp.services;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 import com.example.CoffeeApp.repositories.ProductRepo;
 import com.example.CoffeeApp.domains.Product;
@@ -17,6 +18,8 @@ public class ProductService {
 
     // Adds a new product to the repository
     public void addProduct(Product p) {
+        int id = Math.abs(p.getproductName().hashCode());
+        p.setid(id);
         productrepo.save(p);
     }
 

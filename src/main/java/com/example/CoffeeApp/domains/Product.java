@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 8)
     private long id;
 
     @Column(nullable = false)

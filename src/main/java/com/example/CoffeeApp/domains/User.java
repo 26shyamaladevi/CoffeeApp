@@ -2,11 +2,12 @@ package com.example.CoffeeApp.domains;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class User {
@@ -25,9 +26,17 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "Role_Id", referencedColumnName = "R_id")
     private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role roleId) {
+        this.role = roleId;
+    }
 
     // Constructors
     public User() {
@@ -73,14 +82,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Role getrole() {
-        return role;
-    }
-
-    public void setrole(Role role) {
-        this.role = role;
     }
 
 }
