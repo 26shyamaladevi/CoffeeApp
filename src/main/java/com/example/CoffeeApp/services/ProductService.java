@@ -1,10 +1,12 @@
 package com.example.CoffeeApp.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import com.example.CoffeeApp.repositories.ProductRepo;
 import com.example.CoffeeApp.domains.Product;
+import com.example.CoffeeApp.domains.User;
 
 /* Service class responsible for product-related operations. Implements business logic for product management and interacts with ProductRepo for data access */
 
@@ -60,6 +62,11 @@ public class ProductService {
         }
 
         return true;
+    }
+
+    public Product findById(Long id) {
+        Optional<Product> optionalProduct = productrepo.findById(id);
+        return optionalProduct.orElse(null);
     }
 
 }

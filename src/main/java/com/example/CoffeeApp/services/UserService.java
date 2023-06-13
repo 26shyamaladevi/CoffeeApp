@@ -3,6 +3,8 @@ package com.example.CoffeeApp.services;
 import com.example.CoffeeApp.repositories.UserRepo;
 import com.example.CoffeeApp.domains.User;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 /* Service class responsible for user-related operations.
@@ -60,6 +62,11 @@ public class UserService {
         } else {
             return false;
         }
+    }
+
+    public User findById(Long id) {
+        Optional<User> optionalUser = userrepo.findById(id);
+        return optionalUser.orElse(null);
     }
 
 }

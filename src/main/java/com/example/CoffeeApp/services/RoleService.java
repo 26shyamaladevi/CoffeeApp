@@ -1,9 +1,7 @@
 package com.example.CoffeeApp.services;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.example.CoffeeApp.domains.Role;
 import com.example.CoffeeApp.repositories.RoleRepo;
 
@@ -16,7 +14,7 @@ public class RoleService {
         this.rolerepo = roleRepo;
     }
 
-    // Retrieve all users
+    // Retrieve all Roles
     public List<Role> viewRoles() {
         return (List<Role>) rolerepo.findAll();
     }
@@ -25,6 +23,7 @@ public class RoleService {
         return rolerepo.existsByRName(role);
     }
 
+    // add New Roles
     public void addRoles(Role role) {
         if (role.getRName().isEmpty()) {
             Role user_role = role;
