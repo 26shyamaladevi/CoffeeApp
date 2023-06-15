@@ -38,4 +38,8 @@ public class Product {
         this.price = price;
     }
 
+    public Product orElseThrow(Object object) {
+        return null;
+    }
+
 }

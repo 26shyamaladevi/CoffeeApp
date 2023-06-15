@@ -69,4 +69,8 @@ public class ProductService {
         return optionalProduct.orElse(null);
     }
 
+    public boolean existsById(long getid) {
+        return productrepo.existsById(getid);
+    }
+
 }

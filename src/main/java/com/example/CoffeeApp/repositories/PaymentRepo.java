@@ -7,4 +7,6 @@ import com.fasterxml.jackson.databind.ser.impl.StringArraySerializer;
 
 public interface PaymentRepo extends CrudRepository<Payment, StringArraySerializer> {
 
+    Payment findByPaymentMethod(String string);
+
 }

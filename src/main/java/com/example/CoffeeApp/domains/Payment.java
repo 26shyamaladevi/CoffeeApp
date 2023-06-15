@@ -6,16 +6,16 @@ import jakarta.persistence.*;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long pid;
 
     private String paymentMethod;
 
     public long getId() {
-        return id;
+        return pid;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.pid = id;
     }
 
     public String getPaymentMethod() {
