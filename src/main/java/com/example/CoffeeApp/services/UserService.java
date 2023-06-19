@@ -1,6 +1,7 @@
 package com.example.CoffeeApp.services;
 
 import com.example.CoffeeApp.repositories.UserRepo;
+import com.example.CoffeeApp.domains.Role;
 import com.example.CoffeeApp.domains.User;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ public class UserService {
     public final UserRepo userrepo;
     public final RoleService roleService;
 
-    // Constructor injection of UserRepo dependency
+    // Constructor injection of UserRepo,roleservice dependency
     public UserService(UserRepo userRepo, RoleService roleservice) {
         this.userrepo = userRepo;
         this.roleService = roleservice;
@@ -26,10 +27,15 @@ public class UserService {
         return (List<User>) userrepo.findAll();
     }
 
-    // Add a new user
+    // Add New User
     public void addUsers(User user) {
-        if (user.getRole() != null) {
+        if (user.getRole() != null && user.getRole().getRName() != null) {
             roleService.addRoles(user.getRole());
+            userrepo.save(user);
+
+        } else {
+            Role userRole = null;
+            roleService.addRoles(userRole);
             userrepo.save(user);
 
         }

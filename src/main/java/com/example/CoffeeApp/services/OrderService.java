@@ -3,9 +3,7 @@ package com.example.CoffeeApp.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.CoffeeApp.services.*;
 import com.example.CoffeeApp.domains.*;
 import com.example.CoffeeApp.repositories.OrderItemsRepo;
 import com.example.CoffeeApp.repositories.OrdersRepo;
@@ -30,12 +28,20 @@ public class OrderService {
         this.paymentRepo = paymentRepo;
     }
 
-    public List<Orders> viewOrders(Long orderId) {
+    // Display Items of the Orders
+    public List<OrderItems> viewOrders(Long orderId) {
+        // Find the order by its order number
+        Optional<Orders> optionalOrder = ordersRepo.findByOrderId(orderId);
 
-        return (List<Orders>) ordersRepo.findByOrderId(orderId);
+        if (optionalOrder.isEmpty()) {
+            throw new IllegalArgumentException("Order not found");
+        }
 
+        Orders order = optionalOrder.get();
+        return orderItemsRepo.findByOrdersOrderId(order.getOrderId());
     }
 
+    // Create a New Order
     public boolean createOrder(Orders order) {
         User customer = userService.findById(order.getCustomer().getUserId());
         if (customer == null) {
@@ -52,13 +58,15 @@ public class OrderService {
         newOrder.setCustomerEmailId(customer.getEmailId());
         newOrder.setPaymentMethod(payment.getPaymentMethod());
 
-        // Save the Orders entity to make it managed
+        // Save the Orders
         ordersRepo.save(newOrder);
 
         // Set the managed Orders entity to the OrderItems
         for (OrderItems orderItem : order.getOrderItems()) {
+
             // Check if the Product Exsist in the product table
             if (productService.existsById(orderItem.getpId())) {
+
                 Product product = productService.findById(orderItem.getpId());
                 orderItem.setpId(product.getid());
                 orderItem.setpName(product.getproductName());
@@ -76,41 +84,77 @@ public class OrderService {
 
     }
 
-    public boolean updateOrder(long orderId, Orders updatedOrder) {
+    // Update Orders
+    public boolean updateOrder(Long orderId, Orders updatedOrder) {
+        // Check if the order exists
         Optional<Orders> optionalOrder = ordersRepo.findByOrderId(orderId);
 
-        if (optionalOrder.isPresent()) {
-            Orders existingOrder = optionalOrder.get();
+        if (optionalOrder.isEmpty()) {
+            throw new IllegalArgumentException("Order not found");
+        }
 
-            // Update the properties of the existing order with the new values
+        Orders existingOrder = optionalOrder.get();
+        System.out.println("ExistingOrder: " + existingOrder);
 
-            for (OrderItems orderItem : existingOrder.getOrderItems()) {
-                // Check if the Product Exsist in the product table
-                if (productService.existsById(orderItem.getpId())) {
-                    Product product = productService.findById(orderItem.getpId());
-                    orderItem.setpId(product.getid());
-                    orderItem.setpName(product.getproductName());
-                    orderItem.setPrice(product.getprice());
-                    orderItem.setOrders(updatedOrder);
+        // Update the properties of the existing order with the values from the updated
+        // order
+        existingOrder.setPaymentMethod(updatedOrder.getPaymentMethod());
+
+        // Update the order items
+        List<OrderItems> updatedOrderItems = updatedOrder.getOrderItems();
+        List<OrderItems> existingOrderItems = existingOrder.getOrderItems();
+
+        for (OrderItems updatedItem : updatedOrderItems) {
+
+            boolean itemExists = false;
+
+            for (OrderItems existingItem : existingOrderItems) {
+
+                if (existingItem.getpId() == updatedItem.getpId()) {
+                    // Update the existing order item
+                    Product product = productService.findById(updatedItem.getpId());
+                    if (product != null) {
+                        existingItem.setpId(product.getid());
+                        existingItem.setpName(product.getproductName());
+                        existingItem.setPrice(product.getprice());
+                        existingItem.setQuantity(updatedItem.getQuantity());
+                        existingItem.setOrders(existingOrder);
+                    } else {
+                        throw new IllegalArgumentException("Invalid Product");
+                    }
+                    itemExists = true;
+                    break;
                 }
-
             }
-            return true;
+            if (!itemExists) {
+                // Add the new order item to the existing order
+                Product product = productService.findById(updatedItem.getpId());
+                if (product != null) {
+                    updatedItem.setpId(product.getid());
+                    updatedItem.setpName(product.getproductName());
+                    updatedItem.setPrice(product.getprice());
+                    updatedItem.setOrders(existingOrder);
+                    existingOrderItems.add(updatedItem);
+                } else {
+                    throw new IllegalArgumentException("Invalid Product");
+                }
+            }
         }
 
-        else {
-            return false;
-        }
+        // Save the updated order
+        ordersRepo.save(existingOrder);
 
+        return true;
+    }
+
+    // Delete order
+    public void deleteOrder(Orders order) {
+        ordersRepo.delete(order);
     }
 
     public Orders getOrderById(Long orderId) {
         Optional<Orders> optionalOrder = ordersRepo.findByOrderId(orderId);
         return optionalOrder.orElse(null);
-    }
-
-    public void deleteOrder(Orders order) {
-        ordersRepo.delete(order);
     }
 
 }

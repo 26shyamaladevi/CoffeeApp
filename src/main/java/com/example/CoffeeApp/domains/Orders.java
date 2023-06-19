@@ -1,10 +1,6 @@
 package com.example.CoffeeApp.domains;
 
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import jakarta.persistence.*;
 
 @Entity

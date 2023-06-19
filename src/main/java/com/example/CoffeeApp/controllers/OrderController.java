@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.CoffeeApp.domains.OrderItems;
 import com.example.CoffeeApp.domains.Orders;
 import com.example.CoffeeApp.services.OrderService;
 
@@ -19,8 +20,9 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    // ViewOrders
     @GetMapping("orders/{orderId}")
-    public List<Orders> getOrders(@PathVariable("orderId") Long orderId) {
+    public List<OrderItems> getOrders(@PathVariable("orderId") Long orderId) {
         return orderService.viewOrders(orderId);
     }
 
@@ -33,6 +35,7 @@ public class OrderController {
 
     }
 
+    // UpdateOrder
     @PutMapping("orders/update/{orderId}")
     public ResponseEntity<String> updateOrder(@PathVariable long orderId, @RequestBody Orders updatedOrder) {
         boolean isUpdated = orderService.updateOrder(orderId, updatedOrder);
@@ -53,7 +56,7 @@ public class OrderController {
         }
 
         orderService.deleteOrder(existingOrder);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 }

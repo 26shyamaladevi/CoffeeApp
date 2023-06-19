@@ -22,11 +22,13 @@ public class UserController {
     @Autowired
     private UserService userservice;
 
+    // View Users
     @GetMapping("/users")
     public List<User> getUsers() {
         return userservice.viewUsers();
     }
 
+    // AddNewuser
     @PostMapping("/users/add")
     public String addNewUsers(@RequestBody User user) {
         if (userservice.isexistsByEmail(user.getEmailId())) {
@@ -38,6 +40,7 @@ public class UserController {
 
     }
 
+    // Update User
     @PutMapping(value = "/users/update")
     public ResponseEntity<String> updateUsers(@RequestBody User user) {
         boolean isId = userservice.isexistsByUserId(user.getUserId());
@@ -54,6 +57,7 @@ public class UserController {
 
     }
 
+    // Delete User
     @DeleteMapping("/users/delete/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         boolean deleted = userservice.deleteUser(id);

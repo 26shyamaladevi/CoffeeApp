@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.example.CoffeeApp.repositories.ProductRepo;
 import com.example.CoffeeApp.domains.Product;
-import com.example.CoffeeApp.domains.User;
 
 /* Service class responsible for product-related operations. Implements business logic for product management and interacts with ProductRepo for data access */
 

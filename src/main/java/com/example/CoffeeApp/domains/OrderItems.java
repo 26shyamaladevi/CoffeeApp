@@ -1,17 +1,8 @@
 package com.example.CoffeeApp.domains;
 
-import java.io.Serializable;
-
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.micrometer.common.lang.NonNull;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class OrderItems {
@@ -21,16 +12,13 @@ public class OrderItems {
 
     @ManyToOne
     @JoinColumn(name = "orderId")
-    @JsonSerialize
+    @JsonIgnoreProperties("orderItems")
     private Orders orders;
 
-    @JoinColumn(name = "id")
     private long pId;
 
-    @JoinColumn(name = "productName")
     private String pName;
 
-    @JoinColumn(name = "price")
     private double price;
 
     @NonNull
